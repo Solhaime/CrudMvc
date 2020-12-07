@@ -7,7 +7,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface UserService {
-    void add( User user);
+    void add( User user, String[] role);
+
+    void add( User user );
 
     List<User> listUsers();
 
@@ -17,7 +19,7 @@ public interface UserService {
 
     public User  getUserById( Long id );
 
-    public void mergeUser(User user);
+    public void mergeUser(User user, String[] role, String isActive);
 
     String encodePassword(String password);
 }

@@ -28,7 +28,7 @@ public class UserDaoImp implements UserDao{
 
     @Override
     public List<User> listUsers() {
-        return em.createQuery("from User user JOIN FETCH user.roles").getResultList();
+        return em.createQuery("select distinct user from User user JOIN FETCH user.roles").getResultList();
 
     }
 

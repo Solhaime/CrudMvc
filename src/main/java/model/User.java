@@ -38,7 +38,7 @@ public class User implements UserDetails {
 
     private String password;
 
-    private boolean isActive = true;
+    private boolean isActive;
 
 
     @ManyToMany(cascade =
@@ -110,7 +110,15 @@ public class User implements UserDetails {
         roles.add(role);
     }
 
-    public void changeRole(String role){
+    public void setRoles( Set<Role> roles ) {
+        this.roles = roles;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void changeRole( String role){
         this.roles.clear();
         this.roles.add(new Role(role));
     }

@@ -19,6 +19,7 @@ import service.userService.UserService;
 import service.roleService.RoleService;
 
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -41,7 +42,6 @@ public class AdminController {
     List<String> availableRoles;
 
 
-
     @GetMapping("/users/add")
     @PreAuthorize("hasAuthority('ADMIN')")
     public String newUser( Model model ) {
@@ -52,17 +52,12 @@ public class AdminController {
 
     @PostMapping("users/add")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String returnAllUsers( @ModelAttribute("user") User user,
-                                  @RequestParam("roleName") String roleName,
-                                  @RequestParam("username") String username, Model model ) {
-        model.addAttribute("takenUsername", username);
-        Role role = roleService.getRoleByName(roleName);
-        if(role == null) {
-            role = new Role(roleName);
-        }
-        user.setRole(role);
-            userService.mergeUser(user);
-            return "/success";
+    public String returnAllUsers( @ModelAttribute("user") User user ,
+                                  @RequestParam("roleName") String[] roleName ,
+                                  @RequestParam("username") String username , Model model ) {
+        model.addAttribute("takenUsername" , username);
+        userService.add(user, roleName);
+        return "/success";
 
     }
 
@@ -75,46 +70,41 @@ public class AdminController {
 
     @GetMapping("users/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String deleteUserGetController(){
+    public String deleteUserGetController() {
         return "/delete";
     }
 
     @PostMapping("users/delete")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String deleteUserPostController(@RequestParam("id") String id){
+    public String deleteUserPostController( @RequestParam("id") String id ) {
         userService.deleteUserById(Long.parseLong(id));
         return "successdel";
     }
 
     @GetMapping("users/update")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String updateUserDetailsGetController(Model model){
+    public String updateUserDetailsGetController( Model model ) {
         model.addAttribute("updatableUser" , new User());
-        model.addAttribute("accountBlockValue",accountBlockValue);
+        model.addAttribute("accountBlockValue" , accountBlockValue);
         model.addAttribute("rolesList" , availableRoles);
         return "update";
     }
 
     @PostMapping("users/update")
     @PreAuthorize("hasAuthority('ADMIN')")
-    public String updateUserDetailsPostController(@ModelAttribute("updatableUser") User user
-            , @RequestParam("roleName")String roleName,@RequestParam("isActive") String isActive){
-        Role role = roleService.getRoleByName(roleName);
-        if(role == null) {
-            role = new Role(roleName);
-        }
-        user.setRole(role);
-        user.setActive(Boolean.parseBoolean(isActive));
-        userService.mergeUser(user);
+    public String updateUserDetailsPostController( @ModelAttribute("updatableUser") User user
+            , @RequestParam("roleName") String[] roleName , @RequestParam("isActive") String isActive ) {
+        userService.mergeUser(user, roleName, isActive);
         return "successupd";
     }
+
     @ExceptionHandler(HibernateException.class)
-    public String constraintExceptionHandler(){
+    public String constraintExceptionHandler() {
         return "constraintusername";
     }
 
     @ExceptionHandler(NumberFormatException.class)
-    public String idFormatExceptionHandler(){
+    public String idFormatExceptionHandler() {
         return "numberformatexc";
     }
 }
