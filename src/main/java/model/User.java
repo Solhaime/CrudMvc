@@ -179,7 +179,7 @@ public class User implements UserDetails {
         return isActive;
     }
 
-    @Override
+/*    @Override
     public String toString() {
         return "User{" +
                 "id=" + id +
@@ -189,5 +189,5 @@ public class User implements UserDetails {
                 ", password='" + password + '\'' +
                 ", roles=" + getRolesString() +
                 '}';
-    }
+    }*/
 }

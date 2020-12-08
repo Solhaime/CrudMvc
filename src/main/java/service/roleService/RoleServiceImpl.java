@@ -6,6 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 @Service
 public class RoleServiceImpl implements RoleService{
 
@@ -30,6 +33,10 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public Role getRoleByName( String role ) {
         return roleDao.getRoleByName(role);
+    }
+
+    public Set<Role> getMultipleRoles( String[] role ){
+        return roleDao.getMultipleRoles(role);
     }
 
 }

@@ -22,4 +22,5 @@ public interface UserService {
     public void mergeUser(User user, String[] role, String isActive);
 
     String encodePassword(String password);
+    
 }

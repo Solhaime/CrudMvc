@@ -77,7 +77,6 @@ public class UserServiceImp implements UserService {
     @Transactional
     @Override
     public void mergeUser( User user , String[] roleName, String isActive ) {
-        Arrays.stream(roleName).forEach(x -> user.addRole(x));
         if(!isActive.isEmpty()) {
             user.setActive(Boolean.parseBoolean(isActive));
         } else {
@@ -88,12 +87,10 @@ public class UserServiceImp implements UserService {
         } else {
             user.setPassword(encodePassword(user.getPassword()));
         }
-        if(user.getAuthorities().isEmpty()) {
+        if(roleName.length == 0) {
             user.setRoles(userDao.getUserById(user.getId()).getRoles());
         } else {
-            Set<Role> roles = user.getAuthorities().stream().map(x ->
-                    roleService.getRoleByName(x.getAuthority())).collect(Collectors.toSet());
-            user.setRoles(roles);
+            user.setRoles(roleService.getMultipleRoles(roleName));
         }
         userDao.mergeUser(user);
     }

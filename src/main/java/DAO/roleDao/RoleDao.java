@@ -3,6 +3,8 @@ package DAO.roleDao;
 import model.Role;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 public interface RoleDao {
     void addRole(String role);
@@ -13,4 +15,5 @@ public interface RoleDao {
 
     Role getRoleByName( String role);
 
+    Set<Role> getMultipleRoles( String[] role );
 }
